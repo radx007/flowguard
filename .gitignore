@@ -1,0 +1,46 @@
+# ==========================================
+# 1. Build Outputs (Root & Submodules)
+# ==========================================
+target/
+**/target/
+*.jar
+*.war
+*.class
+
+# Maven wrapper binaries
+.mvn/wrapper/maven-wrapper.jar
+
+# ==========================================
+# 2. IDE & Editor Artifacts
+# ==========================================
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+**/out/
+
+.classpath
+.project
+.settings/
+.factorypath
+.springBeans
+
+.vscode/
+
+# ==========================================
+# 3. Environment & Local Configs
+# ==========================================
+*.env
+*.local
+application-local.yml
+application-local.properties
+
+# ==========================================
+# 4. Logs & Temp Files
+# ==========================================
+*.log
+logs/
+**/logs/
+.DS_Store
+Thumbs.db
