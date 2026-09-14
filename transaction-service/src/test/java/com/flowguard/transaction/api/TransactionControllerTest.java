@@ -3,6 +3,7 @@ package com.flowguard.transaction.api;
 import com.flowguard.transaction.application.TransactionService;
 import com.flowguard.transaction.domain.Transaction;
 import com.flowguard.transaction.domain.TransactionStatus;
+import com.flowguard.transaction.application.IdempotencyConflictException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -78,5 +79,29 @@ class TransactionControllerTest {
                                 }
                                 """))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void create_returnsConflictForIdempotencyConflict() throws Exception {
+        when(transactionService.create(
+                "idem-123",
+                new BigDecimal("5000.00"),
+                "DZD",
+                "merchant-42"))
+                .thenThrow(new IdempotencyConflictException(
+                        "Idempotency key has already been used with a different request."));
+
+        mockMvc.perform(post("/transactions")
+                        .header("Idempotency-Key", "idem-123")
+                        .contentType("application/json")
+                        .content("""
+                            {
+                              "amount": 5000.00,
+                              "currency": "DZD",
+                              "merchantId": "merchant-42"
+                            }
+                            """))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("IDEMPOTENCY_CONFLICT"));
     }
 }
