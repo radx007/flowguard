@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: transaction-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/flowguard
+    username: flowguard
+    password: flowguard
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  kafka:
+    bootstrap-servers: localhost:9092

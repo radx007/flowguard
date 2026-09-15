@@ -2,6 +2,7 @@ package com.flowguard.transaction.application;
 
 import com.flowguard.transaction.domain.Transaction;
 import com.flowguard.transaction.domain.TransactionStatus;
+import com.flowguard.transaction.event.TransactionCreatedEvent;
 import com.flowguard.transaction.infrastructure.persistence.TransactionEntity;
 import com.flowguard.transaction.infrastructure.persistence.TransactionRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,9 +16,12 @@ import java.util.UUID;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final TransactionEventPublisher eventPublisher;
 
-    public TransactionService(TransactionRepository transactionRepository) {
+    public TransactionService(TransactionRepository transactionRepository,
+                              TransactionEventPublisher transactionEventPublisher) {
         this.transactionRepository = transactionRepository;
+        this.eventPublisher = transactionEventPublisher;
     }
 
     public Transaction create(
@@ -79,6 +83,16 @@ public class TransactionService {
 
         try {
             transactionRepository.saveAndFlush(entity);
+
+            eventPublisher.publish(new TransactionCreatedEvent(
+                    UUID.randomUUID(),
+                    TransactionCreatedEvent.EVENT_TYPE,
+                    TransactionCreatedEvent.VERSION,
+                    Instant.now(),
+                    transaction.getId(),
+                    transaction.getAmount(),
+                    transaction.getCurrency(),
+                    transaction.getMerchantId()));
             return transaction;
         } catch (DataIntegrityViolationException exception) {
             return transactionRepository.findByIdempotencyKey(idempotencyKey)

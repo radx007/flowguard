@@ -24,8 +24,11 @@ class TransactionServiceTest {
     private final TransactionRepository transactionRepository =
             mock(TransactionRepository.class);
 
+    private final TransactionEventPublisher eventPublisher =
+            mock(TransactionEventPublisher.class);
+
     private final TransactionService transactionService =
-            new TransactionService(transactionRepository);
+            new TransactionService(transactionRepository, eventPublisher);
 
     @Test
     void create_persistsAndReturnsTransaction() {
