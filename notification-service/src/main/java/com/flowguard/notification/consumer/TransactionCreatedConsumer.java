@@ -13,8 +13,8 @@ public class TransactionCreatedConsumer {
             LoggerFactory.getLogger(TransactionCreatedConsumer.class);
 
     @KafkaListener(
-            topics = "transaction.created",
-            groupId = "flowguard-notification")
+            topics = "${flowguard.kafka.topics.transaction-created}",
+            groupId = "${spring.kafka.consumer.group-id}")
     public void consume(TransactionCreatedEvent event) {
         logger.info(
                 "Received transaction.created event: transactionId={}, amount={}, currency={}, merchantId={}",

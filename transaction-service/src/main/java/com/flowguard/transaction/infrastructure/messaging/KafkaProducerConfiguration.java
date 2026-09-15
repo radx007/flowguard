@@ -47,10 +47,9 @@ public class KafkaProducerConfiguration {
     }
 
     @Bean
-    public NewTopic transactionCreatedTopic() {
-        return new NewTopic(
-                KafkaTransactionEventPublisher.TRANSACTION_CREATED_TOPIC,
-                1,
-                (short) 1);
+    public NewTopic transactionCreatedTopic(
+            @Value("${flowguard.kafka.topics.transaction-created}") String topic) {
+
+        return new NewTopic(topic, 1, (short) 1);
     }
 }
