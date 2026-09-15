@@ -26,6 +26,7 @@
 
 	<modules>
 		<module>transaction-service</module>
+		<module>risk-service</module>
 	</modules>
 
 	<dependencyManagement>

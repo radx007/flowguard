@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: risk-service
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: flowguard-risk
+      auto-offset-reset: earliest
