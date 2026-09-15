@@ -27,6 +27,7 @@
 	<modules>
 		<module>transaction-service</module>
 		<module>risk-service</module>
+		<module>ledger-service</module>
 	</modules>
 
 	<dependencyManagement>
